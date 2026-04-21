@@ -17,17 +17,21 @@ app.add_middleware(
 )
 
 # Load the trained model
-MODEL_PATH = "iris_model.pkl"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "iris_model.pkl")
 model = None
 
 @app.on_event("startup")
 async def load_model():
     global model
+    print("Current working directory:", os.getcwd())
+    print("Files in directory:", os.listdir())
+    
     if os.path.exists(MODEL_PATH):
         model = joblib.load(MODEL_PATH)
         print("Model loaded successfully!")
     else:
-        print("Warning: Model file not found. Please run train_model.py first.")
+        print(f"Model NOT found at {MODEL_PATH}")
 
 class IrisFeatures(BaseModel):
     sepal_length: float = Field(..., ge=0, le=10, description="Sepal Length in cm")

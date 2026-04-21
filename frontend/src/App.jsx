@@ -29,8 +29,6 @@ function App() {
     setError(null);
     setPrediction(null);
 
-    console.log(API_URL);
-
     try {
       const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
