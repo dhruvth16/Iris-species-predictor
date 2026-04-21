@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 function App() {
   const [formData, setFormData] = useState({
@@ -28,6 +28,8 @@ function App() {
     setLoading(true);
     setError(null);
     setPrediction(null);
+
+    console.log(API_URL);
 
     try {
       const response = await fetch(`${API_URL}/predict`, {
