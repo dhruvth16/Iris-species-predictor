@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 import joblib
 import numpy as np
 import os
+from fastapi import Response
 
 app = FastAPI(title="Iris Species Prediction API")
 
@@ -20,6 +21,17 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "iris_model.pkl")
 model = None
+
+@app.options("/{rest_of_path:path}")
+async def preflight_handler(rest_of_path: str):
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "https://iris-species-predictor.vercel.app",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
 
 @app.on_event("startup")
 async def load_model():
